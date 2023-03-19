@@ -6,6 +6,7 @@ var level = 0
 var bgMusic = []
 var started = false;
 
+// Gives the user new button to follow
 function nextSequence() {
     let randomNumber = Math.floor(Math.random() * 4)
     console.log(randomNumber)
@@ -20,11 +21,13 @@ function nextSequence() {
     $('h1').text(`Level ${level}`)
 }
 
+// play sound when user clicks any button
 function playSound(name) {
     var colorSound = new Audio("sounds/" + name + ".mp3")
     colorSound.play()
 }
 
+// Animate a press effect when user clicks button
 function animatePress(currentColour) {
     $(`#${currentColour}`).addClass("pressed")
     setTimeout(() => {
@@ -32,6 +35,7 @@ function animatePress(currentColour) {
     }, 100);
 }
 
+// Play bg music with given index aka name
 function playBg(index) {
     bgMusic[index].volume = 0.1
     bgMusic[index].loop = true
@@ -41,6 +45,7 @@ function playBg(index) {
 var playFirstSound = true
 var isMuted = false
 
+// click anywhere for first time ONLY
 $('body').on('keypress', function (e) {
     if (started == false && e.keyCode == 13) {
         bgMusic[0] = new Audio("sounds/game-music.mp3")
@@ -71,6 +76,7 @@ $('body').on('keypress', function (e) {
     }
 });
 
+// check if user is right
 function checkAnswer(currentLevel) {
     if (userClickedPattern[currentLevel] === gamePattern[currentLevel]) {
         if (userClickedPattern.length === gamePattern.length) {
@@ -91,6 +97,7 @@ function checkAnswer(currentLevel) {
     }
 }
 
+// start over when game ends
 function startOver() {
     $('h1').text("Uh-oh! Press Enter To Restart!")
     started = false
@@ -98,6 +105,7 @@ function startOver() {
     level = 0
 }
 
+// when use clicks any button
 $('.btn').on("click", function () {
     var userChosenColour = $(this).attr('id');
     animatePress(userChosenColour)
