@@ -33,33 +33,41 @@ function animatePress(currentColour) {
 }
 
 function playBg(index) {
-    bgMusic[index].volume = 0.5
+    bgMusic[index].volume = 0.1
     bgMusic[index].loop = true
     bgMusic[index].play()
 }
+
+var playFirstSound = true
+var isMuted = false
 
 $('body').on('keypress', function (e) {
     if (started == false && e.keyCode == 13) {
         bgMusic[0] = new Audio("sounds/game-music.mp3")
         bgMusic[1] = new Audio("sounds/bg-music2.mp3")
-        playBg(0)
+        if (playFirstSound) {
+            playBg(0)
+        } else {
+            playBg(1)
+        }
         $('#music-int').css("display", "inline")
         nextSequence()
         $('h1').text("Level " + level)
         started = true;
     }
 
-    if (e.key == 'm') {
-        bgMusic[0].pause();
-        bgMusic[0].currentTime = 0;
-        bgMusic[1].pause();
-        bgMusic[1].currentTime = 0;
-    }
-
-    if(e.key == 's') {
-        bgMusic[0].pause();
-        bgMusic[0].currentTime = 0;
-        playBg(1);
+    if (e.key == 's') {
+        if (playFirstSound == true) {
+            bgMusic[0].pause();
+            bgMusic[0].currentTime = 0;
+            playBg(1);
+            playFirstSound = false
+        } else {
+            bgMusic[1].pause();
+            bgMusic[1].currentTime = 0;
+            playBg(0);
+            playFirstSound = true
+        }
     }
 });
 
