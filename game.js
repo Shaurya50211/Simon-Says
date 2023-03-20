@@ -3,9 +3,8 @@ var randomChosenColor = ""
 var gamePattern = []
 var userClickedPattern = []
 var level = 0
-var bgMusic = []
 var started = false;
-
+var bgMusic = new Audio('sounds/bg-music.mp3')
 // Gives the user new button to follow
 function nextSequence() {
     let randomNumber = Math.floor(Math.random() * 4)
@@ -35,43 +34,31 @@ function animatePress(currentColour) {
     }, 100);
 }
 
-// Play bg music with given index aka name
-function playBg(index) {
-    bgMusic[index].volume = 0.1
-    bgMusic[index].loop = true
-    bgMusic[index].play()
-}
-
-var playFirstSound = true
-var isMuted = false
+var soundPlaying = true
 
 // click anywhere for first time ONLY
 $('body').on('keypress', function (e) {
     if (started == false && e.keyCode == 13) {
-        bgMusic[0] = new Audio("sounds/game-music.mp3")
-        bgMusic[1] = new Audio("sounds/bg-music2.mp3")
-        if (playFirstSound) {
-            playBg(0)
-        } else {
-            playBg(1)
-        }
+        bgMusic.volume = 0.2
+        bgMusic.loop = true
+        bgMusic.play()
+        soundPlaying = true
+
         $('#music-int').css("display", "inline")
         nextSequence()
         $('h1').text("Level " + level)
         started = true;
     }
 
-    if (e.key == 's') {
-        if (playFirstSound == true) {
-            bgMusic[0].pause();
-            bgMusic[0].currentTime = 0;
-            playBg(1);
-            playFirstSound = false
+    if (e.key == 'm') {
+        if (soundPlaying) {
+            bgMusic.pause()
+            soundPlaying = false
         } else {
-            bgMusic[1].pause();
-            bgMusic[1].currentTime = 0;
-            playBg(0);
-            playFirstSound = true
+            bgMusic.volume = 0.1
+            bgMusic.loop = true
+            bgMusic.play()
+            soundPlaying = true
         }
     }
 });
@@ -97,12 +84,13 @@ function checkAnswer(currentLevel) {
     }
 }
 
-// start over when game ends
+// reset all variables
 function startOver() {
     $('h1').text("Uh-oh! Press Enter To Restart!")
     started = false
     gamePattern = []
     level = 0
+    userClickedPattern = []
 }
 
 // when use clicks any button
